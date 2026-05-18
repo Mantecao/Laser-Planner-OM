@@ -49,10 +49,22 @@ jobs:
           </manifest>
           EOF
 
-      - name: Subir minSdk a 21
+      - name: Forzar SDK versions en build.gradle
         run: |
-          sed -i 's/minSdk = flutter.minSdkVersion/minSdk = 21/g' android/app/build.gradle.kts || true
-          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle || true
+          FILE=android/app/build.gradle.kts
+          if [ -f "$FILE" ]; then
+            sed -i 's/minSdk = flutter.minSdkVersion/minSdk = 24/' "$FILE"
+            sed -i 's/compileSdk = flutter.compileSdkVersion/compileSdk = 34/' "$FILE"
+            sed -i 's/targetSdk = flutter.targetSdkVersion/targetSdk = 34/' "$FILE"
+          fi
+          FILE2=android/app/build.gradle
+          if [ -f "$FILE2" ]; then
+            sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 24/' "$FILE2"
+            sed -i 's/compileSdkVersion flutter.compileSdkVersion/compileSdkVersion 34/' "$FILE2"
+            sed -i 's/targetSdkVersion flutter.targetSdkVersion/targetSdkVersion 34/' "$FILE2"
+          fi
+          echo "=== build.gradle final ==="
+          cat "$FILE" 2>/dev/null || cat "$FILE2" 2>/dev/null
 
       - run: flutter pub get
       - run: flutter build apk --release
