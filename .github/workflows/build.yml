@@ -22,7 +22,7 @@ jobs:
           channel: 'stable'
 
       - name: Crear estructura Android
-        run: flutter create --platforms=android --org com.laserplanner .
+       run: flutter create --platforms=android --org com.laserplanner --project-name laser_planner .
 
       - name: Restaurar AndroidManifest con permisos BLE
         run: |
